@@ -44,6 +44,7 @@ let sleep = time => new Promise(resolve => {
       }
       return links;
   })
-  await browser.close();
-  console.log(result)
+  browser.close();
+  process.send({result})
+  process.exit(0)
 })();
