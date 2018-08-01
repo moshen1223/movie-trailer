@@ -7,9 +7,7 @@ const {connect, initSchemas} = require('./database/init');
 (async () => {
     await connect();
     initSchemas();
-    const Movie = mongoose.model('Movie');
-    const movies = await Movie.find({});
-    console.log(movies)
+    require('./tasks/api')
 })();
 
 let app = new Koa()

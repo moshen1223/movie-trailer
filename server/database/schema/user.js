@@ -40,11 +40,11 @@ const UserSchema = new Schema({
 
 });
 
-UserSchema.virtual('isLocked').get(() => {
+UserSchema.virtual('isLocked').get(function(){
     return !!(this.lockUntil && this.lockUntil > Date.now());
 })
 
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function(next){
     if(this.isNew){
         this.meta.createdAt = this.meta.updatedAt = Date.now();
     }else{
@@ -53,11 +53,11 @@ UserSchema.pre('save', next => {
     next();
 })
 
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function (next) {
     if(!this.isModified('password')) return next();
-    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
         if (err) return next(err);
-        bcrypt.hash(this.password, salt, (error, hash)=>{
+        bcrypt.hash(this.password, salt, function(error, hash){
             if(error) return next(error);
             this.password = hash;
             next()
@@ -66,7 +66,7 @@ UserSchema.pre('save', next => {
     next();
 });
 UserSchema.methods = {
-    comparePassword: (_password, password) => {
+    comparePassword: function(_password, password){
         return new Promise((resolve, reject)=>{
             bcrypt.compare(_password, password, (err, isMatch) => {
                 if (err) resolve (isMatch)
@@ -74,8 +74,8 @@ UserSchema.methods = {
             })
         })
     },
-    incLoginAttepts: (user) => {
-        return new Promise((resolve, reject)=>{
+    incLoginAttepts: function(user){
+        return new Promise(function(resolve, reject){
             if(this.lockUntil && this.lockUntil<Date.now()){
                 this.update({
                     $set: {
