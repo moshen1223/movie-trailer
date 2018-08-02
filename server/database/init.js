@@ -37,11 +37,6 @@ exports.connect = () => {
         });
     
         mongoose.connection.on('open', () => {
-            const Dog = mongoose.model('Dog',{name: String});
-            const doga = new Dog({name: '小狗a'});
-            doga.save().then(()=>{
-                console.log('汪汪')
-            })
             resolve();
             console.log('successfully');
         })
